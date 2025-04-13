@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+
+    environment {
+        ANSIBLE_HOST_KEY_CHECKING = 'False'  // Disable SSH host key checking
+        INVENTORY_FILE = '/etc/ansible/hosts'  // Path to Ansible inventory
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Priyadharshini2132/Docker-Installation.git'
+            }
+        }
+
+        stage('Install Docker via Ansible') {
+            steps {
+                sh '''
+                ansible-playbook -i $INVENTORY_FILE install_docker.yml
+                '''
+            }
+        }
+    }
+}
